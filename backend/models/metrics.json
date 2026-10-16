@@ -1,0 +1,22 @@
+{
+  "models": {
+    "Naive Baseline": {
+      "MAE_minutes": 2.975,
+      "RMSE_minutes": 4.659,
+      "R2_score": 0.5666
+    },
+    "Linear Regression": {
+      "MAE_minutes": 1.324,
+      "RMSE_minutes": 2.143,
+      "R2_score": 0.9083
+    },
+    "Random Forest": {
+      "MAE_minutes": 0.547,
+      "RMSE_minutes": 0.764,
+      "R2_score": 0.9883
+    }
+  },
+  "champion": "Random Forest",
+  "sample_count": 50000,
+  "test_size": 10000
+}
