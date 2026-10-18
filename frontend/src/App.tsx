@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
 import { DeliveryMap } from './components/Map/DeliveryMap';
+import { InsightsTab } from './components/tabs/InsightsTab';
+import { AlgorithmsTab } from './components/tabs/AlgorithmsTab';
+import { AboutTab } from './components/tabs/AboutTab';
 import {
   StopInput,
   RouteOptimizeResponse,
@@ -9,7 +12,7 @@ import {
 } from './types';
 import { fetchHealth, fetchGraphInfo, optimizeRoute } from './services/api';
 
-// Curated 8 demo delivery stops in Central Delhi grid
+// Curated 8 demo delivery stops in Central Delhi
 const DEMO_DEPOT = { lat: 28.6220, lon: 77.2182 };
 
 const DEMO_STOPS: StopInput[] = [
@@ -27,6 +30,23 @@ export function App() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'insights' | 'algorithms' | 'about'>('dashboard');
   const [isBackendConnected, setIsBackendConnected] = useState(false);
   const [graphInfo, setGraphInfo] = useState<GraphInfo | null>(null);
+
+  // Dark Mode State
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    return localStorage.getItem('routewise_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('routewise_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('routewise_theme', 'light');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   // Route Planning State
   const [depot, setDepot] = useState(DEMO_DEPOT);
@@ -117,7 +137,6 @@ export function App() {
     setErrorMessage(null);
 
     try {
-      // Build ISO departure time
       const today = new Date().toISOString().split('T')[0];
       const isoDeparture = `${today}T${departureTime}:00Z`;
 
@@ -172,52 +191,74 @@ ML Weights: ${routeResult.ml_applied ? 'Enabled' : 'Disabled'}`;
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 transition-colors">
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         cityName={graphInfo?.city_name || 'Central Delhi'}
         isBackendConnected={isBackendConnected}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
 
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        {/* Left Side: Sidebar */}
-        <Sidebar
-          depot={depot}
-          stops={stops}
-          departureTime={departureTime}
-          setDepartureTime={setDepartureTime}
-          weather={weather}
-          setWeather={setWeather}
-          algorithm={algorithm}
-          setAlgorithm={setAlgorithm}
-          useML={useML}
-          setUseML={setUseML}
-          onRemoveStop={handleRemoveStop}
-          onAddSampleStop={handleAddSampleStop}
-          onLoadDemoData={handleLoadDemoData}
-          onClearAll={handleClearAll}
-          onOptimize={handleOptimize}
-          isOptimizing={isOptimizing}
-          errorMessage={errorMessage}
-          routeResult={routeResult}
-          mapClickMode={mapClickMode}
-          setMapClickMode={setMapClickMode}
-          onExportCSV={handleExportCSV}
-          onShareSummary={handleShareSummary}
-        />
-
-        {/* Right Side: Interactive Leaflet Map */}
-        <div className="flex-1 h-[50vh] lg:h-[calc(100vh-61px)] relative">
-          <DeliveryMap
+      {activeTab === 'dashboard' && (
+        <main className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+          {/* Left Side: Sidebar */}
+          <Sidebar
             depot={depot}
             stops={stops}
+            departureTime={departureTime}
+            setDepartureTime={setDepartureTime}
+            weather={weather}
+            setWeather={setWeather}
+            algorithm={algorithm}
+            setAlgorithm={setAlgorithm}
+            useML={useML}
+            setUseML={setUseML}
+            onRemoveStop={handleRemoveStop}
+            onAddSampleStop={handleAddSampleStop}
+            onLoadDemoData={handleLoadDemoData}
+            onClearAll={handleClearAll}
+            onOptimize={handleOptimize}
+            isOptimizing={isOptimizing}
+            errorMessage={errorMessage}
             routeResult={routeResult}
-            onMapClick={handleMapClick}
             mapClickMode={mapClickMode}
+            setMapClickMode={setMapClickMode}
+            onExportCSV={handleExportCSV}
+            onShareSummary={handleShareSummary}
           />
+
+          {/* Right Side: Interactive Leaflet Map */}
+          <div className="flex-1 h-[50vh] lg:h-[calc(100vh-61px)] relative">
+            <DeliveryMap
+              depot={depot}
+              stops={stops}
+              routeResult={routeResult}
+              onMapClick={handleMapClick}
+              mapClickMode={mapClickMode}
+            />
+          </div>
+        </main>
+      )}
+
+      {activeTab === 'insights' && (
+        <div className="flex-1 overflow-y-auto">
+          <InsightsTab />
         </div>
-      </main>
+      )}
+
+      {activeTab === 'algorithms' && (
+        <div className="flex-1 overflow-y-auto">
+          <AlgorithmsTab />
+        </div>
+      )}
+
+      {activeTab === 'about' && (
+        <div className="flex-1 overflow-y-auto">
+          <AboutTab />
+        </div>
+      )}
     </div>
   );
 }
