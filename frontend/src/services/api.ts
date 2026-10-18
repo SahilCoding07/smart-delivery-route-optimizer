@@ -6,7 +6,7 @@ import {
   RouteOptimizeResponse,
 } from '../types';
 
-const API_BASE = '/api';
+const API_BASE = 'http://127.0.0.1:8000/api';
 
 export async function fetchHealth(): Promise<{ status: string; app: string }> {
   const res = await fetch(`${API_BASE}/health`);
