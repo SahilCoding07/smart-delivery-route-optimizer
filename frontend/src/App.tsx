@@ -12,18 +12,18 @@ import {
 } from './types';
 import { fetchHealth, fetchGraphInfo, optimizeRoute } from './services/api';
 
-// Curated 8 demo delivery stops in Central Delhi
-const DEMO_DEPOT = { lat: 28.6220, lon: 77.2182 };
+// Curated 8 demo delivery stops in Dehradun (Clement Town, Graphic Era, Mohbbewala, etc.)
+const DEMO_DEPOT = { lat: 30.2720, lon: 78.0060 }; // Warehouse Hub - Clement Town / ISBT Road
 
 const DEMO_STOPS: StopInput[] = [
-  { id: 'stop_1', name: 'Blinkit Hub - Connaught Place', lat: 28.6315, lon: 77.2210 },
-  { id: 'stop_2', name: 'Apollo 24|7 Pharmacy - Barakhamba', lat: 28.6289, lon: 77.2340 },
-  { id: 'stop_3', name: 'Modern Bazaar - Bengali Market', lat: 28.6240, lon: 77.2310 },
-  { id: 'stop_4', name: 'MedPlus - Gole Market', lat: 28.6340, lon: 77.2110 },
-  { id: 'stop_5', name: 'Delhi Express Courier - Pusa Road', lat: 28.6430, lon: 77.2280 },
-  { id: 'stop_6', name: 'Zepto Quick Grocery - Shivaji Stadium', lat: 28.6300, lon: 77.2150 },
-  { id: 'stop_7', name: 'Fresh Kitchen Tiffins - Mandi House', lat: 28.6260, lon: 77.2380 },
-  { id: 'stop_8', name: 'HealthKart Supplements - Janpath', lat: 28.6210, lon: 77.2190 },
+  { id: 'stop_1', name: 'Graphic Era University - Bell Road', lat: 30.2704, lon: 77.9949 },
+  { id: 'stop_2', name: 'Buddha Temple - Mindrolling Monastery', lat: 30.2606, lon: 78.0097 },
+  { id: 'stop_3', name: 'Subhash Nagar Market', lat: 30.2760, lon: 78.0020 },
+  { id: 'stop_4', name: 'Mohbbewala Industrial Hub', lat: 30.2520, lon: 77.9890 },
+  { id: 'stop_5', name: 'ISBT Dehradun Commercial Terminal', lat: 30.2858, lon: 78.0080 },
+  { id: 'stop_6', name: 'Graphic Era Hill University Campus', lat: 30.2745, lon: 77.9912 },
+  { id: 'stop_7', name: 'Turner Road Commercial Center', lat: 30.2785, lon: 78.0035 },
+  { id: 'stop_8', name: 'Majra Main Market', lat: 30.2890, lon: 78.0120 },
 ];
 
 export function App() {
@@ -217,7 +217,7 @@ ML Weights: ${routeResult.ml_applied ? 'Enabled' : 'Disabled'}`;
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        cityName={graphInfo?.city_name || 'Central Delhi'}
+        cityName={graphInfo?.city_name || 'Dehradun'}
         isBackendConnected={isBackendConnected}
         isDarkMode={isDarkMode}
         onToggleDarkMode={toggleDarkMode}

@@ -92,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Right Tools: Dark Mode & Connection Status */}
       <div className="flex items-center space-x-2 sm:space-x-3">
         <span className="hidden xl:inline-flex items-center text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">
-          City: <strong className="text-slate-700 dark:text-slate-200 ml-1">{cityName || 'Central Delhi'}</strong>
+          City: <strong className="text-slate-700 dark:text-slate-200 ml-1">{cityName || 'Dehradun'}</strong>
         </span>
 
         {/* Dark Mode Toggle */}

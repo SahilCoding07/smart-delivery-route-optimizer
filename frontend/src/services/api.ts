@@ -17,44 +17,48 @@ export interface SearchLocationResult {
   type?: string;
 }
 
-const POPULAR_DELHI_LANDMARKS: SearchLocationResult[] = [
-  { place_id: 'loc_cp', name: 'Connaught Place (CP)', display_name: 'Connaught Place, New Delhi, Delhi, 110001, India', lat: 28.6315, lon: 77.2167, type: 'commercial' },
-  { place_id: 'loc_kg', name: 'Karol Bagh Market', display_name: 'Karol Bagh, Central Delhi, Delhi, 110005, India', lat: 28.6514, lon: 77.1907, type: 'commercial' },
-  { place_id: 'loc_ig', name: 'India Gate', display_name: 'Rajpath, India Gate, New Delhi, Delhi, 110001, India', lat: 28.6129, lon: 77.2295, type: 'monument' },
-  { place_id: 'loc_cc', name: 'Chandni Chowk', display_name: 'Chandni Chowk, Old Delhi, Delhi, 110006, India', lat: 28.6506, lon: 77.2303, type: 'commercial' },
-  { place_id: 'loc_ln', name: 'Lajpat Nagar Central Market', display_name: 'Lajpat Nagar II, South Delhi, Delhi, 110024, India', lat: 28.5700, lon: 77.2400, type: 'commercial' },
-  { place_id: 'loc_hk', name: 'Hauz Khas Village', display_name: 'Hauz Khas, South Delhi, Delhi, 110016, India', lat: 28.5494, lon: 77.2001, type: 'commercial' },
-  { place_id: 'loc_sk', name: 'Select CITYWALK Saket', display_name: 'Saket District Centre, Sector 6, Pushp Vihar, New Delhi, Delhi, 110017, India', lat: 28.5284, lon: 77.2188, type: 'mall' },
-  { place_id: 'loc_aiims', name: 'AIIMS Hospital', display_name: 'Ansari Nagar, New Delhi, Delhi, 110029, India', lat: 28.5672, lon: 77.2100, type: 'hospital' },
-  { place_id: 'loc_bk', name: 'Barakhamba Road', display_name: 'Barakhamba Road, Connaught Place, New Delhi, Delhi, 110001, India', lat: 28.6289, lon: 77.2340, type: 'commercial' },
-  { place_id: 'loc_gm', name: 'Gole Market', display_name: 'Gole Market, New Delhi, Delhi, 110001, India', lat: 28.6340, lon: 77.2110, type: 'commercial' },
-  { place_id: 'loc_rf', name: 'Red Fort (Lal Qila)', display_name: 'Netaji Subhash Marg, Lal Qila, Chandni Chowk, Delhi, 110006, India', lat: 28.6562, lon: 77.2410, type: 'monument' },
-  { place_id: 'loc_dw', name: 'Dwarka Sector 10', display_name: 'Dwarka, South West Delhi, Delhi, 110075, India', lat: 28.5815, lon: 77.0580, type: 'suburb' },
-  { place_id: 'loc_rohini', name: 'Rohini Sector 10', display_name: 'Rohini, North West Delhi, Delhi, 110085, India', lat: 28.7159, lon: 77.1171, type: 'suburb' },
-  { place_id: 'loc_noida', name: 'Noida Sector 18', display_name: 'Sector 18, Noida, Gautam Buddha Nagar, Uttar Pradesh, 201301, India', lat: 28.5708, lon: 77.3260, type: 'commercial' },
-  { place_id: 'loc_ggn', name: 'Cyber Hub Gurugram', display_name: 'DLF Cyber City, Gurugram, Haryana, 122002, India', lat: 28.4950, lon: 77.0890, type: 'commercial' },
-  { place_id: 'loc_khan', name: 'Khan Market', display_name: 'Khan Market, Rabindra Nagar, New Delhi, Delhi, 110003, India', lat: 28.6003, lon: 77.2270, type: 'commercial' },
+const POPULAR_DEHRADUN_LANDMARKS: SearchLocationResult[] = [
+  { place_id: 'ddn_geu', name: 'Graphic Era University (GEU)', display_name: 'Bell Road, Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2704, lon: 77.9949, type: 'university' },
+  { place_id: 'ddn_gehu', name: 'Graphic Era Hill University (GEHU)', display_name: 'Society Area, Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2730, lon: 77.9980, type: 'university' },
+  { place_id: 'ddn_bt', name: 'Buddha Temple (Mindrolling Monastery)', display_name: 'Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2606, lon: 78.0097, type: 'monument' },
+  { place_id: 'ddn_sn', name: 'Subhash Nagar Market', display_name: 'Subhash Nagar, Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2760, lon: 78.0020, type: 'commercial' },
+  { place_id: 'ddn_mb', name: 'Mohbbewala Industrial Hub (Mobewalla)', display_name: 'Mohabewala, Saharanpur Road, Dehradun, Uttarakhand, 248002, India', lat: 30.2520, lon: 77.9890, type: 'industrial' },
+  { place_id: 'ddn_ct', name: 'Clement Town Commercial Hub', display_name: 'Turner Road, Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2685, lon: 78.0075, type: 'commercial' },
+  { place_id: 'ddn_isbt', name: 'ISBT Dehradun Terminal', display_name: 'Haridwar Bypass Road, Majra, Dehradun, Uttarakhand, 248171, India', lat: 30.2858, lon: 78.0080, type: 'station' },
+  { place_id: 'ddn_tr', name: 'Turner Road', display_name: 'Turner Road, Clement Town, Dehradun, Uttarakhand, 248002, India', lat: 30.2735, lon: 78.0125, type: 'street' },
+  { place_id: 'ddn_majra', name: 'Majra Chowk', display_name: 'Saharanpur Road, Majra, Dehradun, Uttarakhand, 248001, India', lat: 30.2800, lon: 78.0000, type: 'commercial' },
+  { place_id: 'ddn_ghanta', name: 'Clock Tower (Ghanta Ghar)', display_name: 'Chowk, Rajpur Road, Paltan Bazaar, Dehradun, Uttarakhand, 248001, India', lat: 30.3245, lon: 78.0418, type: 'monument' },
+  { place_id: 'ddn_paltan', name: 'Paltan Bazaar Market', display_name: 'Paltan Bazaar, Dehradun, Uttarakhand, 248001, India', lat: 30.3210, lon: 78.0380, type: 'commercial' },
+  { place_id: 'ddn_railway', name: 'Dehradun Railway Station', display_name: 'Lakkhi Bagh, Dehradun, Uttarakhand, 248001, India', lat: 30.3155, lon: 78.0345, type: 'station' },
+  { place_id: 'ddn_rajpur', name: 'Pacific Mall (Rajpur Road)', display_name: 'Rajpur Road, Jakhan, Dehradun, Uttarakhand, 248006, India', lat: 30.3550, lon: 78.0670, type: 'mall' },
+  { place_id: 'ddn_premnagar', name: 'Prem Nagar Market', display_name: 'Prem Nagar, Chakrata Road, Dehradun, Uttarakhand, 248007, India', lat: 30.3390, lon: 77.9570, type: 'commercial' },
+  { place_id: 'ddn_ballupur', name: 'Ballupur Chowk', display_name: 'Chakrata Road, Ballupur, Dehradun, Uttarakhand, 248001, India', lat: 30.3330, lon: 78.0120, type: 'commercial' },
+  { place_id: 'ddn_fri', name: 'Forest Research Institute (FRI)', display_name: 'Kaulagarh Road, Dehradun, Uttarakhand, 248006, India', lat: 30.3420, lon: 77.9990, type: 'university' },
+  { place_id: 'ddn_rispana', name: 'Rispana Pul / Vidhan Sabha', display_name: 'Haridwar Road, Dharampur, Dehradun, Uttarakhand, 248001, India', lat: 30.2980, lon: 78.0550, type: 'monument' },
+  { place_id: 'ddn_raipur', name: 'Raipur Block', display_name: 'Raipur Road, Dehradun, Uttarakhand, 248008, India', lat: 30.3100, lon: 78.0900, type: 'suburb' },
+  { place_id: 'ddn_karanpur', name: 'Karanpur Market', display_name: 'Karanpur, Dehradun, Uttarakhand, 248001, India', lat: 30.3280, lon: 78.0530, type: 'commercial' },
 ];
 
 /**
- * Geocode / Search places with instant local matching for popular Delhi landmarks,
- * backed by OpenStreetMap Nominatim API for full coverage.
+ * Geocode / Search places with instant local matching for Dehradun and regional landmarks,
+ * backed by OpenStreetMap Nominatim API for full street-level coverage worldwide.
  */
 export async function searchLocations(query: string): Promise<SearchLocationResult[]> {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];
 
   // 1. Instant local match for quick responsive UI
-  const localMatches = POPULAR_DELHI_LANDMARKS.filter(
+  const localMatches = POPULAR_DEHRADUN_LANDMARKS.filter(
     (item) =>
       item.name.toLowerCase().includes(q) ||
       item.display_name.toLowerCase().includes(q)
   );
 
   try {
+    // Biased to Dehradun valley [minLon, maxLat, maxLon, minLat]
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
       query.trim()
-    )}&viewbox=76.84,28.88,77.38,28.40&bounded=0&limit=6&addressdetails=1`;
+    )}&viewbox=77.90,30.45,78.18,30.20&bounded=0&limit=8&addressdetails=1`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -82,17 +86,18 @@ export async function searchLocations(query: string): Promise<SearchLocationResu
     const combined = [...localMatches];
     remoteMatches.forEach((r) => {
       const isDuplicate = combined.some(
-        (c) => Math.abs(c.lat - r.lat) < 0.005 && Math.abs(c.lon - r.lon) < 0.005
+        (c) => Math.abs(c.lat - r.lat) < 0.003 && Math.abs(c.lon - r.lon) < 0.003
       );
       if (!isDuplicate) combined.push(r);
     });
 
-    return combined.slice(0, 6);
+    return combined.slice(0, 8);
   } catch (err) {
     console.warn('Online location search error, using local landmarks:', err);
     return localMatches;
   }
 }
+
 
 export async function fetchHealth(): Promise<{ status: string; app: string }> {
   const res = await fetch(`${API_BASE}/health`);

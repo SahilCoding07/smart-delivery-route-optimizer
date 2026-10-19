@@ -87,10 +87,10 @@ export const StopList: React.FC<StopListProps> = ({
             type="button"
             onClick={onLoadDemoData}
             className="flex items-center space-x-1 px-2.5 py-1 text-xs font-semibold text-sky-700 bg-sky-50 border border-sky-200 rounded-lg hover:bg-sky-100 transition-colors shadow-2xs"
-            title="Load 8 sample commercial stops in Central Delhi"
+            title="Load sample commercial stops in Dehradun (Graphic Era, Subhash Nagar, Buddha Temple, etc.)"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Load Demo (8)</span>
+            <span>Load Dehradun Demo</span>
           </button>
 
           {stops.length > 0 && (

@@ -104,19 +104,20 @@ def build_or_load_graph(force_rebuild: bool = False) -> Graph:
                 "Falling back safely to the synthetic 30x30 grid city."
             )
 
-    # 3. Default / Fallback: Synthetic Grid City
-    logger.info("Generating synthetic grid city (30x30)...")
+    # 3. Default / Fallback: Synthetic Grid City centered on Dehradun
+    logger.info("Generating synthetic road network for Dehradun (30x30)...")
     graph = generate_synthetic_grid(
         rows=settings.GRID_ROWS,
         cols=settings.GRID_COLS,
-        origin_lat=28.6139,
-        origin_lon=77.2090,
+        origin_lat=30.2500,  # Dehradun Clement Town / Mohbbewala
+        origin_lon=77.9750,  # Graphic Era / Subhash Nagar
         step_km=0.45,
         seed=42,
     )
+    graph.name = "Dehradun_Road_Network"
     save_graph_to_json(graph, cache_file)
     _ACTIVE_GRAPH = graph
-    logger.info(f"Synthetic city ready: {graph.node_count:,} nodes, {graph.edge_count:,} edges.")
+    logger.info(f"Dehradun road network ready: {graph.node_count:,} nodes, {graph.edge_count:,} edges.")
     return graph
 
 

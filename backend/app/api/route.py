@@ -26,8 +26,10 @@ from app.schemas import (
 router = APIRouter(prefix="/route", tags=["Routing"])
 
 
-def check_point_in_bounds(lat: float, lon: float, bbox: tuple[float, float, float, float], margin: float = 0.5) -> bool:
-    """Check if a coordinate lies within the graph bounding box (with optional tolerance margin in degrees)."""
+def check_point_in_bounds(lat: float, lon: float, bbox: tuple[float, float, float, float], margin: float = 3.0) -> bool:
+    """Check if a coordinate lies within the road network region (with generous tolerance margin)."""
+    if not (-90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0):
+        return False
     min_lat, min_lon, max_lat, max_lon = bbox
     return (
         (min_lat - margin <= lat <= max_lat + margin)

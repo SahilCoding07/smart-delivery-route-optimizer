@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     MODELS_DIR: Path = BASE_DIR / "models"
     
     # City & Graph Configuration
-    CITY: str = "Central Delhi, New Delhi, India"
+    CITY: str = "Dehradun, Uttarakhand, India"
     USE_SYNTHETIC_GRID: bool = True
     GRID_ROWS: int = 30
     GRID_COLS: int = 30
