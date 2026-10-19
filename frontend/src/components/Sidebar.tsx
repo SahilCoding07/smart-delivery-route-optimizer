@@ -117,22 +117,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
           setUseML={setUseML}
         />
 
-        {/* Primary Action Button */}
+        {/* Primary Action Button - Step 3 */}
         <button
           type="button"
           onClick={onOptimize}
           disabled={stops.length === 0 || isOptimizing}
-          className="w-full bg-sky-600 hover:bg-sky-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all flex items-center justify-center space-x-2 text-sm"
+          className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm active:scale-[0.99]"
         >
           {isOptimizing ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Optimizing Route via {algorithm.toUpperCase()}...</span>
+              <span>Calculating Best Driving Order...</span>
             </>
           ) : (
             <>
-              <Play className="w-4 h-4 fill-current" />
-              <span>Optimize Route ({stops.length} Stops)</span>
+              <span className="w-5 h-5 rounded-full bg-white/20 text-white flex items-center justify-center text-xs font-black">3</span>
+              <Play className="w-4 h-4 fill-current ml-1" />
+              <span>Generate Driver Route ({stops.length} Stops)</span>
             </>
           )}
         </button>

@@ -23,10 +23,11 @@ export const StopList: React.FC<StopListProps> = ({
       {/* Header & Quick Action Buttons */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-            Stops ({stops.length} / 30)
+          <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center space-x-1.5">
+            <span className="w-4 h-4 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px] font-bold">1</span>
+            <span>Delivery Stops ({stops.length})</span>
           </h3>
-          <span className="text-[11px] text-slate-400">Click map or add sample stops</span>
+          <span className="text-[11px] text-slate-400">Click map or load demo</span>
         </div>
 
         <div className="flex items-center space-x-1.5">

@@ -19,7 +19,6 @@ interface DeliveryMapProps {
   mapClickMode: 'add_stop' | 'set_depot';
 }
 
-// Distinct vibrant palette for route legs
 const LEG_COLORS = [
   '#0284c7', // Sky
   '#10b981', // Emerald
@@ -33,26 +32,55 @@ const LEG_COLORS = [
   '#84cc16', // Lime
 ];
 
-function createDepotIcon() {
+function createDepotIcon(etaStr?: string) {
+  const label = etaStr ? `Depot • ${etaStr}` : 'Warehouse Hub';
   return L.divIcon({
     className: 'custom-depot-pin',
-    html: `<div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #0f172a; border: 2.5px solid #38bdf8; border-radius: 50%; color: #38bdf8; font-weight: bold; font-size: 13px;">🏢</div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
+    html: `
+      <div style="display: flex; align-items: center; gap: 6px; background: #0f172a; border: 2.5px solid #38bdf8; border-radius: 999px; padding: 4px 10px; color: #38bdf8; font-weight: bold; font-size: 11px; box-shadow: 0 4px 14px rgba(0,0,0,0.4); white-space: nowrap;">
+        <span>🏢</span>
+        <span style="color: white;">${label}</span>
+      </div>
+    `,
+    iconSize: [120, 32],
+    iconAnchor: [60, 16],
   });
 }
 
-function createStopIcon(index: number, isOptimized: boolean) {
+function createStopIcon(index: number, name: string, etaStr?: string, isOptimized?: boolean) {
   const bg = isOptimized ? '#0284c7' : '#64748b';
+  const label = etaStr ? `${name.split('-')[0].trim()} • ${etaStr}` : name.split('-')[0].trim();
+
   return L.divIcon({
     className: 'custom-stop-pin',
-    html: `<div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: ${bg}; border: 2px solid white; border-radius: 50%; color: white; font-weight: 700; font-size: 11px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">${index}</div>`,
-    iconSize: [26, 26],
-    iconAnchor: [13, 13],
+    html: `
+      <div style="display: flex; align-items: center; gap: 5px; background: white; border: 2px solid ${bg}; border-radius: 999px; padding: 3px 8px 3px 4px; box-shadow: 0 3px 10px rgba(0,0,0,0.25); white-space: nowrap;">
+        <span style="width: 20px; height: 20px; border-radius: 50%; background: ${bg}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px;">
+          ${index}
+        </span>
+        <span style="font-weight: 600; font-size: 11px; color: #0f172a;">
+          ${label}
+        </span>
+      </div>
+    `,
+    iconSize: [140, 28],
+    iconAnchor: [20, 14],
   });
 }
 
-// Component to handle map clicks
+function createMidLegBadgeIcon(legNumber: number, distKm: number, durationMin: number, color: string) {
+  return L.divIcon({
+    className: 'custom-leg-badge',
+    html: `
+      <div style="background: ${color}; color: white; padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.3); border: 1.5px solid white; white-space: nowrap;">
+        Leg ${legNumber}: ${distKm} km (${durationMin}m)
+      </div>
+    `,
+    iconSize: [110, 20],
+    iconAnchor: [55, 10],
+  });
+}
+
 function MapClickHandler({
   onMapClick,
 }: {
@@ -66,7 +94,6 @@ function MapClickHandler({
   return null;
 }
 
-// Automatically fit bounds when route or stops update
 function AutoFitBounds({
   depot,
   stops,
@@ -91,7 +118,7 @@ function AutoFitBounds({
 
     if (points.length > 1) {
       const bounds = L.latLngBounds(points);
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
     }
   }, [depot, stops, routeResult, map]);
 
@@ -105,15 +132,15 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
   onMapClick,
   mapClickMode,
 }) => {
-  const depotIcon = useMemo(() => createDepotIcon(), []);
+  const depotETA = routeResult?.ordered_stops[0]?.eta;
+  const depotIcon = useMemo(() => createDepotIcon(depotETA), [depotETA]);
 
-  // Map visit indices if optimized
-  const stopVisitIndexMap = useMemo(() => {
-    const map = new Map<string, number>();
+  const stopMetaMap = useMemo(() => {
+    const map = new Map<string, { visitIndex: number; eta: string }>();
     if (routeResult) {
       routeResult.ordered_stops.forEach((st) => {
         if (!st.is_depot) {
-          map.set(st.id, st.visit_index);
+          map.set(st.id, { visitIndex: st.visit_index, eta: st.eta });
         }
       });
     }
@@ -122,13 +149,13 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
 
   return (
     <div className="relative w-full h-full">
-      {/* Floating Click Mode Indicator */}
-      <div className="absolute top-4 right-4 z-[400] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-md border border-slate-200 text-xs font-medium text-slate-700 flex items-center space-x-2">
-        <span className="w-2 h-2 rounded-full bg-sky-500 animate-ping" />
+      {/* Floating Instructions Banner */}
+      <div className="absolute top-4 left-4 z-[400] bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-md border border-slate-200 text-xs text-slate-700 flex items-center space-x-2">
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
         <span>
-          Click Map to:{' '}
-          <strong className="text-sky-700">
-            {mapClickMode === 'set_depot' ? 'Set Depot Location' : 'Add Delivery Stop'}
+          Mode:{' '}
+          <strong className="text-slate-900">
+            {mapClickMode === 'set_depot' ? 'Click map to place Depot' : 'Click map to add a Customer Stop'}
           </strong>
         </span>
       </div>
@@ -152,28 +179,30 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
         <Marker position={[depot.lat, depot.lon]} icon={depotIcon}>
           <Popup>
             <div className="text-xs">
-              <strong className="text-slate-900 block font-bold">Depot / Warehouse</strong>
-              <span className="text-slate-500">Trip start and completion base</span>
+              <strong className="text-slate-900 block font-bold">🏢 Warehouse Depot</strong>
+              <span className="text-slate-600">Start Time: {depotETA || '14:30'}</span>
             </div>
           </Popup>
         </Marker>
 
-        {/* Delivery Stop Markers */}
+        {/* Customer Stop Markers with ETA Badges */}
         {stops.map((stop, idx) => {
-          const visitIdx = stopVisitIndexMap.get(stop.id) ?? idx + 1;
-          const stopIcon = createStopIcon(visitIdx, Boolean(routeResult));
+          const meta = stopMetaMap.get(stop.id);
+          const visitIdx = meta?.visitIndex ?? idx + 1;
+          const etaStr = meta?.eta;
+          const stopIcon = createStopIcon(visitIdx, stop.name, etaStr, Boolean(routeResult));
 
           return (
             <Marker key={stop.id} position={[stop.lat, stop.lon]} icon={stopIcon}>
               <Popup>
-                <div className="text-xs">
+                <div className="text-xs space-y-1">
                   <div className="font-bold text-slate-900">{stop.name}</div>
-                  <div className="text-slate-500 font-mono mt-0.5">
+                  <div className="text-slate-500 font-mono">
                     {stop.lat.toFixed(4)}, {stop.lon.toFixed(4)}
                   </div>
-                  {routeResult && (
-                    <div className="mt-1 font-semibold text-sky-700">
-                      Visit Sequence #{visitIdx}
+                  {routeResult && etaStr && (
+                    <div className="font-bold text-emerald-600">
+                      Visit #{visitIdx} • Estimated Arrival: {etaStr}
                     </div>
                   )}
                 </div>
@@ -182,33 +211,47 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
           );
         })}
 
-        {/* Route Polylines */}
+        {/* Route Polylines and Mid-Leg Distance Badges */}
         {routeResult &&
           routeResult.legs.map((leg, i) => {
             const color = LEG_COLORS[i % LEG_COLORS.length];
+            const coords = leg.polyline_coords;
+
+            // Pick midpoint coordinate for floating distance/timing badge
+            const midCoord = coords.length > 2 ? coords[Math.floor(coords.length / 2)] : null;
+            const badgeIcon = midCoord
+              ? createMidLegBadgeIcon(i + 1, leg.distance_km, leg.duration_minutes, color)
+              : null;
+
             return (
-              <Polyline
-                key={`leg-${leg.from_stop_id}-${leg.to_stop_id}-${i}`}
-                positions={leg.polyline_coords}
-                pathOptions={{
-                  color,
-                  weight: 5,
-                  opacity: 0.85,
-                  lineJoin: 'round',
-                  lineCap: 'round',
-                }}
-              >
-                <Popup>
-                  <div className="text-xs space-y-1">
-                    <strong className="text-slate-900 block font-bold">
-                      Leg #{i + 1}: {leg.from_name} &rarr; {leg.to_name}
-                    </strong>
-                    <div>Distance: {leg.distance_km} km</div>
-                    <div>Est. Time: {leg.duration_minutes} min</div>
-                    <div>Arrival: {leg.arrival_time}</div>
-                  </div>
-                </Popup>
-              </Polyline>
+              <div key={`leg-container-${i}`}>
+                <Polyline
+                  positions={coords}
+                  pathOptions={{
+                    color,
+                    weight: 6,
+                    opacity: 0.9,
+                    lineJoin: 'round',
+                    lineCap: 'round',
+                  }}
+                >
+                  <Popup>
+                    <div className="text-xs space-y-1">
+                      <strong className="text-slate-900 block font-bold">
+                        Leg #{i + 1}: {leg.from_name} &rarr; {leg.to_name}
+                      </strong>
+                      <div className="text-slate-700">Distance: <b>{leg.distance_km} km</b></div>
+                      <div className="text-slate-700">Est. Time: <b>{leg.duration_minutes} minutes</b></div>
+                      <div className="text-emerald-700 font-semibold">Arrival at stop: <b>{leg.arrival_time}</b></div>
+                    </div>
+                  </Popup>
+                </Polyline>
+
+                {/* Floating midpoint badge showing distance and time on the road */}
+                {midCoord && badgeIcon && (
+                  <Marker position={midCoord} icon={badgeIcon} interactive={false} />
+                )}
+              </div>
             );
           })}
       </MapContainer>
