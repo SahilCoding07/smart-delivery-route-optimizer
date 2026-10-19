@@ -27,9 +27,13 @@ router = APIRouter(prefix="/route", tags=["Routing"])
 
 
 def check_point_in_bounds(lat: float, lon: float, bbox: tuple[float, float, float, float], margin: float = 3.0) -> bool:
-    """Check if a coordinate lies within the road network region (with generous tolerance margin)."""
+    """Check if a coordinate lies within valid bounds (all of India territory or active region bbox)."""
     if not (-90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0):
         return False
+    # Accept any coordinates across India territory
+    is_in_india = (6.0 <= lat <= 38.0 and 68.0 <= lon <= 98.0)
+    if is_in_india:
+        return True
     min_lat, min_lon, max_lat, max_lon = bbox
     return (
         (min_lat - margin <= lat <= max_lat + margin)

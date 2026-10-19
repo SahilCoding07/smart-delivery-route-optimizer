@@ -97,7 +97,7 @@ export const LocationSearchBar: React.FC<LocationSearchBarProps> = ({
               handleSelectAddStop(results[0]);
             }
           }}
-          placeholder="Search location (e.g. Karol Bagh, AIIMS, Connaught Place)..."
+          placeholder="Search any place in India (e.g. Graphic Era, Bandra, Connaught Place, MG Road)..."
           className="w-full py-2.5 pl-2.5 pr-8 text-xs sm:text-sm bg-transparent border-none text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none"
         />
 
@@ -171,7 +171,7 @@ export const LocationSearchBar: React.FC<LocationSearchBarProps> = ({
 
       {isOpen && query.trim().length >= 2 && !isLoading && results.length === 0 && (
         <div className="absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-3 text-center text-xs text-slate-500 z-[1000]">
-          No locations found for "{query}". Try another landmark or area name in Delhi.
+          No locations found for "{query}". Try another landmark, area, or street name in India.
         </div>
       )}
     </div>

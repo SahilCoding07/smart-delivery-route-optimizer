@@ -173,8 +173,8 @@ class Graph:
 def generate_synthetic_grid(
     rows: int = 30,
     cols: int = 30,
-    origin_lat: float = 28.6139,
-    origin_lon: float = 77.2090,
+    origin_lat: float = 30.2500,
+    origin_lon: float = 77.9750,
     step_km: float = 0.5,
     seed: int = 42,
 ) -> Graph:
@@ -183,7 +183,7 @@ def generate_synthetic_grid(
 
     Parameters:
         rows, cols: Dimensions of the grid (default 30x30 = 900 nodes).
-        origin_lat, origin_lon: Coordinates of bottom-left corner (default New Delhi, India).
+        origin_lat, origin_lon: Coordinates of bottom-left corner (default Dehradun, Uttarakhand, India).
         step_km: Distance in km between adjacent grid intersections.
         seed: Random seed for reproducible road type and turn assignments.
 

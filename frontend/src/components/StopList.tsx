@@ -127,7 +127,7 @@ export const StopList: React.FC<StopListProps> = ({
                   handleSelectResult(searchResults[0]);
                 }
               }}
-              placeholder="Search location in Delhi (e.g. Karol Bagh, CP, Saket)..."
+              placeholder="Search any place, street or city in India..."
               className="w-full py-1.5 pl-2 pr-3 text-xs bg-transparent border-none text-slate-800 placeholder-slate-400 focus:outline-none"
             />
           </div>
@@ -214,7 +214,6 @@ export const StopList: React.FC<StopListProps> = ({
         )}
       </div>
 
-      {/* Manual Quick Add Button */}
       {stops.length < 30 && (
         <button
           type="button"
@@ -222,7 +221,7 @@ export const StopList: React.FC<StopListProps> = ({
           className="w-full flex items-center justify-center space-x-1 py-1.5 border border-dashed border-slate-300 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Add Random Stop in Delhi</span>
+          <span>+ Add Quick Nearby Stop</span>
         </button>
       )}
     </div>
