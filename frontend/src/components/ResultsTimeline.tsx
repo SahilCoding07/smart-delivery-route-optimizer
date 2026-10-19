@@ -24,7 +24,7 @@ export const ResultsTimeline: React.FC<ResultsTimelineProps> = ({
   onExportCSV,
   onShareSummary,
 }) => {
-  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(true);
 
   return (
     <div className="space-y-4 pt-2">
@@ -98,7 +98,7 @@ export const ResultsTimeline: React.FC<ResultsTimelineProps> = ({
           </span>
         </div>
 
-        <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+        <div className="space-y-3 pr-1">
           {result.ordered_stops.map((stop, i) => {
             const leg = i > 0 ? result.legs[i - 1] : null;
             const isFirst = i === 0;
@@ -188,40 +188,64 @@ export const ResultsTimeline: React.FC<ResultsTimelineProps> = ({
         </div>
       </div>
 
-      {/* 3. Expandable Technical AI & Algorithm Details */}
-      <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800 text-xs">
+      {/* 3. Detailed Route Insights & AI Performance Breakdown */}
+      <div className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-800 shadow-sm text-xs">
         <button
           type="button"
           onClick={() => setShowTechnicalDetails((prev) => !prev)}
-          className="w-full flex items-center justify-between p-3 font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+          className="w-full flex items-center justify-between p-3.5 font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors"
         >
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-purple-500" />
-            <span>How AI & Algorithms Optimized This</span>
+            <Sparkles className="w-4 h-4 text-purple-600" />
+            <span className="text-xs uppercase tracking-wider">Route Optimization Insights & Metrics</span>
           </div>
           {showTechnicalDetails ? (
-            <ChevronUp className="w-4 h-4" />
+            <ChevronUp className="w-4 h-4 text-slate-400" />
           ) : (
-            <ChevronDown className="w-4 h-4" />
+            <ChevronDown className="w-4 h-4 text-slate-400" />
           )}
         </button>
 
         {showTechnicalDetails && (
-          <div className="p-3 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-700 space-y-2 text-[11px] text-slate-600 dark:text-slate-300">
-            <div className="flex items-center space-x-2 text-emerald-600 dark:text-emerald-400 font-bold">
-              <TrendingDown className="w-4 h-4" />
-              <span>
-                2-Opt untangled path crossings: {result.two_opt_improvement_pct}% distance saved
-                ({result.two_opt_swaps} edge swaps).
-              </span>
+          <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-700 space-y-3 text-[11px]">
+            {/* 2-Opt TSP Stat Banner */}
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 flex items-start space-x-2.5">
+              <TrendingDown className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <div className="font-bold text-emerald-900 dark:text-emerald-300 text-xs">
+                  {result.two_opt_improvement_pct}% Distance Saved via 2-Opt
+                </div>
+                <div className="text-emerald-700 dark:text-emerald-400 mt-0.5">
+                  Local search eliminated crossed paths across {result.two_opt_swaps} edge swaps.
+                </div>
+              </div>
             </div>
-            <div>
-              • <b>AI Traffic Prediction:</b>{' '}
-              {result.ml_applied ? 'Active (congestion & rain weights)' : 'Disabled (distance only)'}.
+
+            {/* Performance Grid */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">Algorithm</div>
+                <div className="font-extrabold text-slate-900 dark:text-white text-xs mt-0.5">
+                  {result.algorithm_used.toUpperCase()} Search
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5">
+                  Solved in {result.compute_time_ms} ms
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">AI Model</div>
+                <div className="font-extrabold text-slate-900 dark:text-white text-xs mt-0.5">
+                  {result.ml_applied ? 'Random Forest ML' : 'Static Distance'}
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5">
+                  {result.ml_applied ? 'Traffic & rain weights applied' : 'Raw distance weights'}
+                </div>
+              </div>
             </div>
-            <div>
-              • <b>Algorithm:</b> {result.algorithm_used} Search solved all intersections in{' '}
-              <b>{result.compute_time_ms} ms</b>.
+
+            <div className="text-[10.5px] text-slate-500 dark:text-slate-400 leading-relaxed pt-1">
+              • Graph Search explored <b>{result.nodes_explored.toLocaleString()}</b> intersections to guarantee optimal shortest paths.
             </div>
           </div>
         )}

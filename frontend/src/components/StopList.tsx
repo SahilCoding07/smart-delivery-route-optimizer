@@ -121,7 +121,13 @@ export const StopList: React.FC<StopListProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => searchQuery.trim().length >= 2 && setShowDropdown(true)}
-              placeholder="Search location in Delhi to add as stop..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && searchResults.length > 0) {
+                  e.preventDefault();
+                  handleSelectResult(searchResults[0]);
+                }
+              }}
+              placeholder="Search location in Delhi (e.g. Karol Bagh, CP, Saket)..."
               className="w-full py-1.5 pl-2 pr-3 text-xs bg-transparent border-none text-slate-800 placeholder-slate-400 focus:outline-none"
             />
           </div>

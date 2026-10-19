@@ -69,7 +69,14 @@ export const LocationSearchBar: React.FC<LocationSearchBarProps> = ({
   };
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-md">
+    <div
+      ref={containerRef}
+      className="relative w-full max-w-md z-[1050]"
+      onMouseDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
+      onDoubleClick={(e) => e.stopPropagation()}
+      onWheel={(e) => e.stopPropagation()}
+    >
       <div className="relative flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg transition-all focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-sky-500">
         <div className="pl-3 text-slate-400">
           {isLoading ? (
@@ -84,6 +91,12 @@ export const LocationSearchBar: React.FC<LocationSearchBarProps> = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && results.length > 0) {
+              e.preventDefault();
+              handleSelectAddStop(results[0]);
+            }
+          }}
           placeholder="Search location (e.g. Karol Bagh, AIIMS, Connaught Place)..."
           className="w-full py-2.5 pl-2.5 pr-8 text-xs sm:text-sm bg-transparent border-none text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none"
         />

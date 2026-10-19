@@ -9,30 +9,25 @@
   }
 }
 
-/* Custom Leaflet Marker Styling */
-.custom-depot-pin {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0f172a;
-  color: #38bdf8;
-  border: 2px solid #38bdf8;
-  border-radius: 9999px;
-  font-weight: 700;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+/* Fix Leaflet DivIcon default borders and background glitch */
+.leaflet-div-icon,
+.custom-depot-pin,
+.custom-stop-pin,
+.custom-leg-badge {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-.custom-stop-pin {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0284c7;
-  color: #ffffff;
-  border: 2px solid #ffffff;
-  border-radius: 9999px;
-  font-weight: 700;
-  font-size: 13px;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+/* Prevent text selection and jitter during zoom animation */
+.leaflet-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  will-change: transform;
 }
 
 /* Smooth custom scrollbars */

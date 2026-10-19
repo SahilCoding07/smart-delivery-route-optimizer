@@ -5,6 +5,7 @@ import {
   Marker,
   Popup,
   Polyline,
+  LayerGroup,
   useMap,
   useMapEvents,
 } from 'react-leaflet';
@@ -155,7 +156,7 @@ function MapEventHandler({
   return null;
 }
 
-// Auto-fit bounds when stops or route result changes
+// Auto-fit bounds ONLY on initial load or when a new route is optimized
 function AutoFitBounds({
   depot,
   stops,
@@ -166,8 +167,16 @@ function AutoFitBounds({
   routeResult: RouteOptimizeResponse | null;
 }) {
   const map = useMap();
+  const prevResultRef = useRef<RouteOptimizeResponse | null>(null);
+  const hasInitializedRef = useRef(false);
 
   useEffect(() => {
+    // Only fit bounds on first load or when routeResult is newly generated
+    const isNewRoute = routeResult && routeResult !== prevResultRef.current;
+    const isFirstRun = !hasInitializedRef.current && stops.length > 0;
+
+    if (!isFirstRun && !isNewRoute) return;
+
     const points: [number, number][] = [[depot.lat, depot.lon]];
 
     if (routeResult && routeResult.legs.length > 0) {
@@ -182,6 +191,9 @@ function AutoFitBounds({
       const bounds = L.latLngBounds(points);
       map.fitBounds(bounds, { padding: [60, 60], maxZoom: 15 });
     }
+
+    hasInitializedRef.current = true;
+    prevResultRef.current = routeResult;
   }, [depot, stops, routeResult, map]);
 
   return null;
@@ -262,7 +274,13 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
   return (
     <div className="relative w-full h-full bg-slate-900 overflow-hidden select-none">
       {/* 1. Top Floating Bar: Location Search + Click Mode Controls */}
-      <div className="absolute top-3 left-3 right-3 sm:right-auto sm:left-4 z-[400] flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+      <div
+        className="absolute top-3 left-3 right-3 sm:right-auto sm:left-4 z-[1000] flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        onDoubleClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
+      >
         {/* Geocoding Location Search Bar */}
         <LocationSearchBar
           onAddStop={onAddStop}
@@ -271,7 +289,7 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
         />
 
         {/* Map Click Action Mode Switcher */}
-        <div className="flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-1 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 text-xs">
+        <div className="flex items-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-1 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 text-xs shrink-0">
           <button
             type="button"
             onClick={() => setMapClickMode('add_stop')}
@@ -301,7 +319,13 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
       </div>
 
       {/* 2. Top-Right Floating Tool Controls (Layer Toggle + Fit Route + Zoom) */}
-      <div className="absolute top-3 right-3 z-[400] flex flex-col space-y-2">
+      <div
+        className="absolute top-3 right-3 z-[1000] flex flex-col space-y-2"
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        onDoubleClick={(e) => e.stopPropagation()}
+        onWheel={(e) => e.stopPropagation()}
+      >
         {/* Satellite vs Street Map Switcher */}
         <div className="flex bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-1 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 text-xs">
           <button
@@ -491,7 +515,7 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
               : null;
 
             return (
-              <div key={`leg-polyline-group-${i}`}>
+              <LayerGroup key={`leg-polyline-group-${i}`}>
                 {/* 1. Outer Dark Casing Polyline for High Contrast */}
                 <Polyline
                   positions={coords}
@@ -545,7 +569,7 @@ export const DeliveryMap: React.FC<DeliveryMapProps> = ({
                 {midCoord && badgeIcon && (
                   <Marker position={midCoord} icon={badgeIcon} interactive={false} />
                 )}
-              </div>
+              </LayerGroup>
             );
           })}
       </MapContainer>
