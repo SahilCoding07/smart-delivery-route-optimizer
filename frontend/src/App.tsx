@@ -131,6 +131,28 @@ export function App() {
     }
   };
 
+  const handleAddStopFromSearch = (name: string, lat: number, lon: number) => {
+    if (stops.length >= 30) {
+      setErrorMessage('Maximum limit of 30 stops reached.');
+      return;
+    }
+    const newStop: StopInput = {
+      id: `stop_${Date.now()}`,
+      name,
+      lat: Number(lat.toFixed(4)),
+      lon: Number(lon.toFixed(4)),
+    };
+    setStops((prev) => [...prev, newStop]);
+    setRouteResult(null);
+    setErrorMessage(null);
+  };
+
+  const handleSetDepotFromSearch = (lat: number, lon: number) => {
+    setDepot({ lat: Number(lat.toFixed(4)), lon: Number(lon.toFixed(4)) });
+    setRouteResult(null);
+    setErrorMessage(null);
+  };
+
   const handleOptimize = async () => {
     if (stops.length === 0) return;
     setIsOptimizing(true);
@@ -225,6 +247,7 @@ ML Weights: ${routeResult.ml_applied ? 'Enabled' : 'Disabled'}`;
             routeResult={routeResult}
             mapClickMode={mapClickMode}
             setMapClickMode={setMapClickMode}
+            onAddStopFromSearch={handleAddStopFromSearch}
             onExportCSV={handleExportCSV}
             onShareSummary={handleShareSummary}
           />
@@ -237,6 +260,9 @@ ML Weights: ${routeResult.ml_applied ? 'Enabled' : 'Disabled'}`;
               routeResult={routeResult}
               onMapClick={handleMapClick}
               mapClickMode={mapClickMode}
+              setMapClickMode={setMapClickMode}
+              onAddStop={handleAddStopFromSearch}
+              onSetDepot={handleSetDepotFromSearch}
             />
           </div>
         </main>

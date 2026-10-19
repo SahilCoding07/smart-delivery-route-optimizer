@@ -98,48 +98,90 @@ export const ResultsTimeline: React.FC<ResultsTimelineProps> = ({
           </span>
         </div>
 
-        <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+        <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
           {result.ordered_stops.map((stop, i) => {
             const leg = i > 0 ? result.legs[i - 1] : null;
+            const isFirst = i === 0;
+            const isLast = i === result.ordered_stops.length - 1;
+
+            // Calculate cumulative distance up to this stop
+            const cumulativeKm = Number(
+              result.legs
+                .slice(0, i)
+                .reduce((acc, curr) => acc + curr.distance_km, 0)
+                .toFixed(2)
+            );
 
             return (
-              <div
-                key={`${stop.id}-${i}`}
-                className={`p-2.5 rounded-xl border transition-all text-xs ${
-                  stop.is_depot
-                    ? 'bg-slate-900 text-white border-slate-800'
-                    : 'bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-700 hover:border-sky-300'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 ${
-                        stop.is_depot
-                          ? 'bg-sky-400 text-slate-900'
-                          : 'bg-sky-600 text-white'
-                      }`}
-                    >
-                      {stop.is_depot ? '🏢' : i}
-                    </span>
-                    <span className="font-bold truncate text-slate-900 dark:text-white">
-                      {stop.name}
-                    </span>
-                  </div>
+              <div key={`${stop.id}-${i}`} className="relative pl-6">
+                {/* Vertical Connector Line */}
+                {!isLast && (
+                  <div className="absolute left-[11px] top-6 bottom-[-14px] w-0.5 bg-sky-200 dark:bg-sky-900 z-0" />
+                )}
 
-                  <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border border-sky-300 dark:border-sky-800 shrink-0">
-                    {stop.is_depot && i === 0 ? `Start: ${stop.eta}` : `Reach: ${stop.eta}`}
-                  </span>
+                {/* Step Node Dot */}
+                <div
+                  className={`absolute left-0 top-1.5 w-6 h-6 rounded-full flex items-center justify-center font-bold text-[11px] shadow-sm z-10 ${
+                    stop.is_depot
+                      ? 'bg-slate-900 text-sky-400 ring-2 ring-sky-400'
+                      : 'bg-sky-600 text-white ring-2 ring-white dark:ring-slate-800'
+                  }`}
+                >
+                  {stop.is_depot ? (isFirst ? '🏢' : '🏁') : i}
                 </div>
 
+                {/* Prior Leg Drive Stats Pill */}
                 {leg && (
-                  <div className="mt-1.5 pl-7 text-[11px] text-slate-500 dark:text-slate-400 flex items-center space-x-2 font-mono">
+                  <div className="mb-1.5 flex items-center space-x-2 text-[10.5px] font-semibold text-slate-500 dark:text-slate-400 font-mono bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-md w-fit border border-slate-200 dark:border-slate-700">
                     <ArrowRight className="w-3 h-3 text-sky-500 shrink-0" />
-                    <span>Drive {leg.distance_km} km</span>
+                    <span className="text-sky-700 dark:text-sky-300 font-bold">
+                      Drive {leg.distance_km} km
+                    </span>
                     <span>•</span>
-                    <span>{leg.duration_minutes} min journey</span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      {leg.duration_minutes} mins
+                    </span>
+                    <span className="text-slate-400">•</span>
+                    <span className="text-slate-400 text-[10px]">
+                      (Total: {cumulativeKm} km)
+                    </span>
                   </div>
                 )}
+
+                {/* Stop Card */}
+                <div
+                  className={`p-2.5 rounded-xl border transition-all text-xs ${
+                    stop.is_depot
+                      ? 'bg-slate-900 text-white border-slate-800 shadow-xs'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:border-sky-300 hover:shadow-xs'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="font-bold truncate text-slate-900 dark:text-white pr-2">
+                      {stop.name}
+                    </div>
+
+                    <span
+                      className={`font-mono font-bold text-[11px] px-2 py-0.5 rounded shrink-0 ${
+                        isFirst
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                          : isLast
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          : 'bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border border-sky-300 dark:border-sky-800'
+                      }`}
+                    >
+                      {isFirst
+                        ? `Depart: ${stop.eta}`
+                        : isLast
+                        ? `Return: ${stop.eta}`
+                        : `Arrive: ${stop.eta}`}
+                    </span>
+                  </div>
+
+                  <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    {stop.lat.toFixed(4)}, {stop.lon.toFixed(4)}
+                  </div>
+                </div>
               </div>
             );
           })}

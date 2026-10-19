@@ -25,6 +25,7 @@ interface SidebarProps {
   routeResult: RouteOptimizeResponse | null;
   mapClickMode: 'add_stop' | 'set_depot';
   setMapClickMode: (mode: 'add_stop' | 'set_depot') => void;
+  onAddStopFromSearch: (name: string, lat: number, lon: number) => void;
   onExportCSV: () => void;
   onShareSummary: () => void;
 }
@@ -50,6 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   routeResult,
   mapClickMode,
   setMapClickMode,
+  onAddStopFromSearch,
   onExportCSV,
   onShareSummary,
 }) => {
@@ -103,6 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           onAddSampleStop={onAddSampleStop}
           onLoadDemoData={onLoadDemoData}
           onClearAll={onClearAll}
+          onAddStopFromSearch={onAddStopFromSearch}
         />
 
         {/* Trip & Algorithm Settings */}
